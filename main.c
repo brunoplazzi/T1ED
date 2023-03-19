@@ -62,16 +62,32 @@ void salvarArquivo(IMG foto, char* dict){
         }
         fprintf(out, "\n");
     }
+
+    fclose(out);
+}
+
+IMG negativo(IMG foto){
+    
+    int i, j;
+
+    for(i = 0; i < foto.altura; i++){
+        for(j = 0; j < foto.largura; j++){
+            foto.mat[i][j] = 255 - foto.mat[i][j];
+        }  
+    }
+    return foto;
 }
 
 int main(void){
     
-    int i;
+    int i, j;
     char dict[] = "ifes.pgm";
     char dictOut[] = "ifes-out.pgm";
 
     IMG foto = lerArquivo(dict);
     
+    foto = negativo(foto);
+
     
     salvarArquivo(foto, dictOut);
 
