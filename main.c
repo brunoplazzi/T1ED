@@ -78,17 +78,35 @@ IMG negativo(IMG foto){
     return foto;
 }
 
-int main(void){
+IMG espelhamento(IMG foto, IMG fotoED){
     
     int i, j;
+    int jed;
+
+    for (i = 0; i < foto.altura; i++){     
+        jed = 0;
+        for(j = foto.largura; j > 0; j--){;
+            fotoED.mat[i][jed] = foto.mat[i][j];
+            jed++;
+        }
+    }
+    
+    return fotoED;
+}
+
+int main(void){
+    
+    int i;
     char dict[] = "ifes.pgm";
     char dictOut[] = "ifes-out.pgm";
 
     IMG foto = lerArquivo(dict);
+    IMG fotoED = lerArquivo(dict);
     
-    foto = negativo(foto);
+    //foto = negativo(foto);
 
-    
+    foto = espelhamento(foto, fotoED);
+
     salvarArquivo(foto, dictOut);
 
 
