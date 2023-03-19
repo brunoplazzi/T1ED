@@ -9,6 +9,22 @@ typedef struct{
     int **mat;
 } IMG;
 
+//retorna o maior valor de um vetor v, com n elementos
+int maior(int n, int* v){
+
+  int i;
+  int maior = v[0];
+
+  for(i = 0; i < n; i++){
+    if(v[i] >= maior){
+      maior = v[i];
+    }
+  }
+  return maior;
+}
+
+
+//le arquivo da imagem e retorna o tipo IMG
 IMG lerArquivo(char *dict){
     IMG foto;
     int i, j; 
@@ -42,6 +58,7 @@ IMG lerArquivo(char *dict){
     return foto;
 }
 
+//recebe o tipo IMG e o caminho e salva a foto no arquivo
 void salvarArquivo(IMG foto, char* dict){
     
     int i, j;
@@ -99,38 +116,42 @@ IMG blur(IMG foto, IMG fotoED){
     
     for (i = 0; i < foto.altura; i++){
         for(j = 0; j < foto.largura ; j++){
-        //linha 0
+            //primeira linha
             if (i == 0){
-                //coluna 0
+                //primeira coluna
                 if (j == 0){
-                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i+1][j] + foto.mat[i][j+1] + foto.mat[i+1][j+1])/4;
-                } // ultima coluna
+                    fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i+1][j] + foto.mat[i][j+1] + foto.mat[i+1][j+1])/4;
+                }
+                //ultima coluna
                 else if (j == foto.largura - 1){
-                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i+1][j] + foto.mat[i+1][j-1] + foto.mat[i][j-1])/4;
-                } //colunas do meio
+                    fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i+1][j] + foto.mat[i+1][j-1] + foto.mat[i][j-1])/4;
+                }
+                //colunas do meio
                 else{
-                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i][j-1] + foto.mat[i+1][j-1] + foto.mat[i+1][j] + foto.mat[i+1][j+1] + foto.mat[i][j+1])/6;
+                    fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i][j-1] + foto.mat[i+1][j-1] + foto.mat[i+1][j] + foto.mat[i+1][j+1] + foto.mat[i][j+1])/6;
                 }
             }
             //ultima linha
             if (i == foto.altura - 1){
-                //coluna 0
+                //primeira coluna
                 if (j == 0){
-                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i-1][j] + foto.mat[i-1][j+1] + foto.mat[i][j+1])/4;
-                } // ultima coluna
+                    fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i-1][j] + foto.mat[i-1][j+1] + foto.mat[i][j+1])/4;
+                }
+                //ultima coluna
                 else if (j == foto.largura - 1){
-                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i][j-1] + foto.mat[i-1][j-1] + foto.mat[i-1][j])/4;
-                } //colunas do meio
+                    fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i][j-1] + foto.mat[i-1][j-1] + foto.mat[i-1][j])/4;
+                }
+                //colunas do meio
                 else{
-                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i][j-1] + foto.mat[i-1][j-1] + foto.mat[i-1][j] + foto.mat[i-1][j+1] + foto.mat[1][j+1])/6;
+                    fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i][j-1] + foto.mat[i-1][j-1] + foto.mat[i-1][j] + foto.mat[i-1][j+1] + foto.mat[i][j+1])/6;
                 }
             }
-            //coluna 0
+            //primeira coluna, exceto primeira e ultima linha
             if((j == 0) && (i > 0) && (i < foto.altura - 1)){
                 fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i-1][j] + foto.mat[i-1][j+1] + foto.mat[i][j+1] + foto.mat[i+1][j+1] + foto.mat[i+1][j])/6; 
             }
 
-            //ultima coluna
+            //ultima coluna, exceto primeira e ultima linha
             if((j == foto.largura - 1) && (i > 0) && (i < foto.altura - 1)){  
                 fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i-1][j] + foto.mat[i-1][j-1] + foto.mat[i][j-1] + foto.mat[i+1][j-1] + foto.mat[i+1][j])/6;   
             }
@@ -146,22 +167,97 @@ IMG blur(IMG foto, IMG fotoED){
 
 }
 
+IMG bright(IMG foto, IMG fotoED){
+    
+    int i, j;
+
+    for (i = 0; i < foto.altura; i++){
+        for(j = 0; j < foto.largura ; j++){
+            //primeira linha
+            if (i == 0){
+                //primeira coluna
+                if (j == 0){
+                    int v[4] = {foto.mat[i][j], foto.mat[i+1][j], foto.mat[i][j+1], foto.mat[i+1][j+1]};
+                    fotoED.mat[i][j] = maior(4, v);
+                } 
+                //ultima coluna
+                else if (j == foto.largura - 1){
+                    int v[4] = {foto.mat[i][j], foto.mat[i+1][j], foto.mat[i+1][j-1], foto.mat[i][j-1]};
+                    fotoED.mat[i][j] = maior(4, v);
+                }
+                //colunas do meio
+                else{
+                    int v[6] = {foto.mat[i][j], foto.mat[i][j-1], foto.mat[i+1][j-1], foto.mat[i+1][j], foto.mat[i+1][j+1], foto.mat[i][j+1]};
+                    fotoED.mat[i][j] = maior(6, v);
+                }
+            }
+            //ultima linha
+            if (i == foto.altura - 1){
+                //primeira coluna
+                if (j == 0){
+                    int v[4] = {foto.mat[i][j], foto.mat[i-1][j], foto.mat[i-1][j+1], foto.mat[i][j+1]};
+                    fotoED.mat[i][j] = maior(4, v);
+                }
+                //ultima coluna
+                else if (j == foto.largura - 1){
+                    int v[4] = {foto.mat[i][j], foto.mat[i][j-1], foto.mat[i-1][j-1], foto.mat[i-1][j]};
+                    fotoED.mat[i][j] = maior(4, v);
+                }
+                //colunas do meio
+                else{
+                    int v[6] = {foto.mat[i][j], foto.mat[i][j-1], foto.mat[i-1][j-1], foto.mat[i-1][j], foto.mat[i-1][j+1], foto.mat[i][j+1]};
+                    fotoED.mat[i][j] = maior(6, v);
+                }
+            }
+            //primeira coluna, exceto primeira e ultima linha
+            if((j == 0) && (i > 0) && (i < foto.altura - 1)){
+                int v[6] = {foto.mat[i][j], foto.mat[i-1][j], foto.mat[i-1][j+1], foto.mat[i][j+1], foto.mat[i+1][j+1], foto.mat[i+1][j]};
+                fotoED.mat[i][j] = maior(6, v);
+            }
+
+            //ultima coluna, exceto primeira e ultima linha
+            if((j == foto.largura - 1) && (i > 0) && (i < foto.altura - 1)){ 
+                int v[6] = {foto.mat[i][j], foto.mat[i-1][j], foto.mat[i-1][j-1], foto.mat[i][j-1], foto.mat[i+1][j-1], foto.mat[i+1][j]}; 
+                fotoED.mat[i][j] = maior(6, v);
+            }
+
+            //linhas e colunas do meio
+            if((i > 0) && (i < foto.altura - 1) && (j > 0) && (j < foto.largura - 1)){
+                int v[9] = {foto.mat[i][j], foto.mat[i-1][j], foto.mat[i-1][j-1], foto.mat[i][j-1], foto.mat[i+1][j-1], foto.mat[i+1][j], foto.mat[i+1][j+1], foto.mat[i][j+1], foto.mat[i-1][j+1]};
+                fotoED.mat[i][j] = maior(9, v);
+            }
+        }
+    }
+    
+    return fotoED;
+}
+
 int main(void){
     
     int i;
     char dict[] = "ifes.pgm";
-    char dictOut[] = "ifes-out.pgm";
+    //char dictOut[] = "ifes-out.pgm";
 
     IMG foto = lerArquivo(dict);
     IMG fotoED = lerArquivo(dict);
     
-    //foto = negativo(foto);
-
-    //foto = espelhamento(foto, fotoED);
-
+    foto = negativo(foto);
+    salvarArquivo(foto, "ifes-neg.pgm");
+    
+    foto = lerArquivo(dict);
+    foto = espelhamento(foto, fotoED);
+    salvarArquivo(foto, "ifes-esp.pgm");
+    
+    foto = lerArquivo(dict);
     foto = blur(foto, fotoED);
+    salvarArquivo(foto, "ifes-blur.pgm");
 
-    salvarArquivo(foto, dictOut);
+    foto = lerArquivo(dict);
+    foto = bright(foto, fotoED);
+    salvarArquivo(foto, "ifes-bright.pgm");
+
+    
+    //salvarArquivo(foto, dictOut);
 
 
     //libera a memória alocada para a matriz
