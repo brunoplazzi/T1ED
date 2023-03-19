@@ -94,6 +94,58 @@ IMG espelhamento(IMG foto, IMG fotoED){
     return fotoED;
 }
 
+IMG blur(IMG foto, IMG fotoED){
+    int i, j;
+    
+    for (i = 0; i < foto.altura; i++){
+        for(j = 0; j < foto.largura ; j++){
+        //linha 0
+            if (i == 0){
+                //coluna 0
+                if (j == 0){
+                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i+1][j] + foto.mat[i][j+1] + foto.mat[i+1][j+1])/4;
+                } // ultima coluna
+                else if (j == foto.largura - 1){
+                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i+1][j] + foto.mat[i+1][j-1] + foto.mat[i][j-1])/4;
+                } //colunas do meio
+                else{
+                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i][j-1] + foto.mat[i+1][j-1] + foto.mat[i+1][j] + foto.mat[i+1][j+1] + foto.mat[i][j+1])/6;
+                }
+            }
+            //ultima linha
+            if (i == foto.altura - 1){
+                //coluna 0
+                if (j == 0){
+                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i-1][j] + foto.mat[i-1][j+1] + foto.mat[i][j+1])/4;
+                } // ultima coluna
+                else if (j == foto.largura - 1){
+                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i][j-1] + foto.mat[i-1][j-1] + foto.mat[i-1][j])/4;
+                } //colunas do meio
+                else{
+                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i][j-1] + foto.mat[i-1][j-1] + foto.mat[i-1][j] + foto.mat[i-1][j+1] + foto.mat[1][j+1])/6;
+                }
+            }
+            //coluna 0
+            if((j == 0) && (i > 0) && (i < foto.altura - 1)){
+                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i-1][j] + foto.mat[i-1][j+1] + foto.mat[i][j+1] + foto.mat[i+1][j+1] + foto.mat[i+1][j])/6; 
+            }
+
+            //ultima coluna
+            if((j == foto.largura - 1) && (i > 0) && (i < foto.altura - 1)){  
+                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i-1][j] + foto.mat[i-1][j-1] + foto.mat[i][j-1] + foto.mat[i+1][j-1] + foto.mat[i+1][j])/6;   
+            }
+
+            //linhas e colunas do meio
+            if((i > 0) && (i < foto.altura - 1) && (j > 0) && (j < foto.largura - 1)){
+                fotoED.mat[i][j] = (foto.mat[i][j] + foto.mat[i-1][j] + foto.mat[i-1][j-1] + foto.mat[i][j-1] + foto.mat[i+1][j-1] + foto.mat[i+1][j] + foto.mat[i+1][j+1] + foto.mat[i][j+1] + foto.mat[i-1][j+1])/9;
+            }
+        }
+    }
+
+    return fotoED;
+
+}
+
 int main(void){
     
     int i;
@@ -105,7 +157,9 @@ int main(void){
     
     //foto = negativo(foto);
 
-    foto = espelhamento(foto, fotoED);
+    //foto = espelhamento(foto, fotoED);
+
+    foto = blur(foto, fotoED);
 
     salvarArquivo(foto, dictOut);
 
