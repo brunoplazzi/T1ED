@@ -232,6 +232,133 @@ IMG bright(IMG foto, IMG fotoED){
     return fotoED;
 }
 
+//funcao do menu para selecionar a imagem
+int caminho() {
+
+  int escolha = -1;
+  char caminho[1024] = "ifes.pgm"; // por enquanto é o nome do arquivo
+
+  while (escolha != 0) {
+    printf("Selecionar imagem:\n\n");
+
+    printf("Caminho atual = %s\n\n", caminho);
+
+    printf("Digite o numero da opcao desejada:\n");
+    printf("[1] Confirmar diretorio\n");
+    printf("[2] Editar diretorio\n");
+    printf("[0] Voltar\n");
+
+    scanf("%d", &escolha);
+
+    if (escolha == 1) {
+
+      printf("Caminho confirmado!\n\n");
+      return 0;
+    } else if (escolha == 2) {
+
+      printf("Digite o novo caminho: \n");
+      scanf("%s", &caminho);
+    } else if (escolha == 0) {
+
+      return 0;
+    }
+  }
+}
+
+//funcao do menu para aplicar o filtro
+int filtro() {
+
+  int escolha = -1;
+
+  while (escolha != 0) {
+    printf("Selecione o numero do filtro que deseja aplicar:\n");
+    printf("[1] Negativo\n");
+    printf("[2] Espelhamento\n");
+    printf("[3] Borramento\n");
+    printf("[4] Brightening\n");
+    printf("[0] Sair\n");
+
+    scanf("%d", &escolha);
+
+    if (escolha == 1) {
+      printf("Efeito negativo aplicado!\n\n");
+      return 0;
+    } else if (escolha == 2) {
+      printf("Efeito espelhamento aplicado!\n\n");
+      return 0;
+    } else if (escolha == 3) {
+      printf("Efeito borramento aplicado!\n\n");
+      return 0;
+    } else if (escolha == 4) {
+      printf("Efeito brightening aplicado!\n\n");
+      return 0;
+    } else if (escolha == 0) {
+      return 0;
+    }
+  }
+}
+
+//funcao do menu para salvar a imagem
+int salvar() {
+
+  int escolha = -1;
+  char caminho[1024] = "ifes-out.pgm"; // por enquanto é o nome do arquivo
+
+  while (escolha != 0) {
+    printf("Selecionar caminho para salvar imagem:\n\n");
+
+    printf("Caminho atual = %s\n\n", caminho);
+
+    printf("Digite o numero da opcao desejada:\n");
+    printf("[1] Confirmar e salvar\n");
+    printf("[2] Editar caminho\n");
+    printf("[0] Voltar\n");
+
+    scanf("%d", &escolha);
+
+    if (escolha == 0) {
+      return 0;
+    } else if (escolha == 1) {
+      printf("Imagem salva!\n\n");
+      return 0;
+    } else if (escolha == 2) {
+      
+      printf("Digite o novo caminho: \n");
+      scanf("%s", &caminho);
+    }
+  }
+}
+
+//MENU PRINCIPAL
+int menu_main() {
+  int action;
+
+  action = -1;
+
+  while (action != 0) {
+
+    printf("Selecione o numero da opcao desejada:\n");
+    printf("[1] Selecionar imagem\n");
+    printf("[2] Aplicar filtro\n");
+    printf("[3] Salvar resultado\n");
+    printf("[0] SAIR\n");
+
+    scanf("%d", &action);
+
+    if (action == 1) {
+      caminho();
+    } else if (action == 2) {
+      filtro();
+    } else if (action == 3) {
+      // implementar funcao 3
+      salvar();
+    } else if (action == 0) {
+      printf("FIM\n\n");
+      return 0;
+    }
+  }
+}
+
 int main(void){
     
     int i;
