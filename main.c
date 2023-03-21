@@ -34,9 +34,7 @@ IMG lerArquivo(char *dict){
     FILE* in;
     in = fopen(dict, "rt");
     if(in == NULL){
-        printf("ERRO FATAL\n");
-    } else{
-        printf("SHOW!\n");
+        printf("ERRO NA LEITURA DO ARQUIVO!\n");
     }
 
     //lendo 3 primeiras linhas do arquivo
@@ -332,6 +330,7 @@ int salvar(IMG fotoED, char *dictOut) {
       return 0;
     } else if (escolha == 1) {
       salvarArquivo(fotoED, dictOut);
+      
       printf("Imagem salva!\n\n");
       return 0;
     } else if (escolha == 2) {
@@ -362,9 +361,10 @@ int menu_main(char* dict, char* dictOut, IMG foto, IMG fotoED) {
         if (action == 1) {
             caminho(dict);
         } else if (action == 2) {
-            foto = filtro(foto, fotoED);
+            foto = lerArquivo(dict);
+            fotoED = filtro(foto, fotoED);
         } else if (action == 3) {
-            salvar(foto, dictOut);
+            salvar(fotoED, dictOut);
         } else if (action == 0) {
             printf("FIM\n\n");
             return 0;
@@ -373,11 +373,25 @@ int menu_main(char* dict, char* dictOut, IMG foto, IMG fotoED) {
     return 0;
 }
 
+//libera a memória alocada para as matrizes
+void liberaMemoria(IMG foto, IMG fotoED){
+    
+    int i;
+    for (i = 0; i < foto.altura; i++) {
+    free(foto.mat[i]);
+    }
+    free(foto.mat);
+
+    for (i = 0; i < fotoED.altura; i++) {
+    free(fotoED.mat[i]);
+    }
+    free(fotoED.mat);
+}
+
 int main(void){
     
-    //int i;
     
-    //diretorio padrao
+    //diretorios padrao
     char dict[1024] = "ifes.pgm";
     char dictOut[1024] = "ifes-out.pgm";
     
@@ -387,12 +401,8 @@ int main(void){
     
     menu_main(dict, dictOut, foto, fotoED);
     
-
-    // //libera a memória alocada para a matriz
-    // for (i = 0; i < foto.altura; i++) {
-    // free(foto.mat[i]);
-    // }
-    // free(foto.mat);
+    liberaMemoria(foto, fotoED);
+   
     
     return 0;
 }
