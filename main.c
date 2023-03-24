@@ -92,16 +92,16 @@ void salvarArquivo(IMG foto, char* dict){
     fclose(out);
 }
 
-IMG negativo(IMG foto){
+IMG negativo(IMG foto, IMG fotoED){
     
     int i, j;
 
     for(i = 0; i < foto.altura; i++){
         for(j = 0; j < foto.largura; j++){
-            foto.mat[i][j] = 255 - foto.mat[i][j];
+            fotoED.mat[i][j] = 255 - foto.mat[i][j];
         }  
     }
-    return foto;
+    return fotoED;
 }
 
 IMG espelhamento(IMG foto, IMG fotoED){
@@ -290,7 +290,7 @@ IMG filtro(IMG foto, IMG fotoED) {
     scanf("%d", &escolha);
 
     if (escolha == 1) {
-      fotoED = negativo(foto);
+      fotoED = negativo(foto, fotoED);
       printf("Filtro negativo aplicado!\n\n");
       escolha = 0;
     } 
