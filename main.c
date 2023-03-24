@@ -23,6 +23,17 @@ int maior(int n, int* v){
   return maior;
 }
 
+//libera a memória alocada para as matrizes
+void liberaMemoria(IMG foto){
+    
+    int i;
+    for (i = 0; i < foto.altura; i++) {
+    free(foto.mat[i]);
+    }
+    free(foto.mat);
+
+}
+
 
 //le arquivo da imagem e retorna o tipo IMG
 IMG lerArquivo(char *dict){
@@ -362,9 +373,13 @@ int menu_main(char* dict, char* dictOut, IMG foto, IMG fotoED) {
             caminho(dict);
         } else if (action == 2) {
             foto = lerArquivo(dict);
+            fotoED = lerArquivo(dict);
             fotoED = filtro(foto, fotoED);
+            liberaMemoria(foto);
+
         } else if (action == 3) {
             salvar(fotoED, dictOut);
+            liberaMemoria(fotoED);
         } else if (action == 0) {
             printf("FIM\n\n");
             return 0;
@@ -373,36 +388,19 @@ int menu_main(char* dict, char* dictOut, IMG foto, IMG fotoED) {
     return 0;
 }
 
-//libera a memória alocada para as matrizes
-void liberaMemoria(IMG foto, IMG fotoED){
-    
-    int i;
-    for (i = 0; i < foto.altura; i++) {
-    free(foto.mat[i]);
-    }
-    free(foto.mat);
 
-    for (i = 0; i < fotoED.altura; i++) {
-    free(fotoED.mat[i]);
-    }
-    free(fotoED.mat);
-}
 
 int main(void){
     
-    
     //diretorios padrao
-    char dict[1024] = "ifes.pgm";
-    char dictOut[1024] = "ifes-out.pgm";
+    char dict[1024] = "../img/ifes1.pgm";
+    char dictOut[1024] = "../img/ifes-out.pgm";
     
-    //carregar as imagens
-    IMG foto = lerArquivo(dict);
-    IMG fotoED = lerArquivo(dict);
+    //declarando os IMGs
+    IMG foto;
+    IMG fotoED;
     
     menu_main(dict, dictOut, foto, fotoED);
-    
-    liberaMemoria(foto, fotoED);
-   
     
     return 0;
 }
