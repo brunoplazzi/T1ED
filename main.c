@@ -393,8 +393,8 @@ int menu_main(char* dict, char* dictOut, IMG foto, IMG fotoED) {
 int main(void){
     
     //diretorios padrao
-    char dict[1024] = "../img/ifes1.pgm";
-    char dictOut[1024] = "../img/ifes-out.pgm";
+    char dict[1024] = "ifes1.pgm";
+    char dictOut[1024] = "ifes-out.pgm";
     
     //declarando os IMGs
     IMG foto;
